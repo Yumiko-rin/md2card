@@ -114,6 +114,7 @@
       watermark: state.watermark,
       showBrand: true
     });
+    $("#stage-empty").hidden = state.markdown.trim() !== "";
     syncToolbar();
   }
 
@@ -187,10 +188,12 @@
   async function renderCardPng() {
     setStatus("正在渲染图片…");
     await md2card.inlineRemoteImages(card);
+    /* 线上(https)内联自托管字体保证导出与预览一致；
+     * file:// 下浏览器禁止 fetch 字体，跳过内联回退系统字体 */
     var dataUrl = await htmlToImage.toPng(card, {
       pixelRatio: state.scale,
       cacheBust: true,
-      skipFonts: true  /* 仅用系统字体，跳过字体内联可避免 file:// 下的跨域报错 */
+      skipFonts: location.protocol === "file:"
     });
     setStatus("渲染完成");
     return dataUrl;
