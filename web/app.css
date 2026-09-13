@@ -48,6 +48,21 @@ body { display: flex; flex-direction: column; }
   border-radius: 4px;
 }
 
+/* 深色滚动条与选区 */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 2px solid var(--bg-deep);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+  background-clip: padding-box;
+}
+::selection { background: rgba(34, 197, 94, .32); }
+
 /* ---------------- 顶栏 ---------------- */
 
 .topbar {
@@ -226,9 +241,45 @@ body { display: flex; flex-direction: column; }
 /* 面板行内的小号按钮 */
 .btn.sm { padding: 3px 10px; font-size: 12px; border-radius: 7px; }
 
+/* 按压反馈 */
+.btn:not(:disabled):active { transform: translateY(1px); }
+.theme-chip:active { transform: scale(.97); }
+
+/* 预览缩放控件 */
+.zoom-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 6px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.zoom-group .btn.sm {
+  border: none;
+  background: transparent;
+  padding: 3px 7px;
+}
+.zoom-group .btn.sm:hover { background: var(--surface-2); }
+#zoom-label {
+  min-width: 42px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+#zoom-label:hover { color: var(--fg); }
+
+/* 卡片切换 / 入场动效 */
+.mdc-card.swap { animation: card-swap .24s ease; }
+@keyframes card-swap {
+  from { opacity: .35; transform: translateY(5px) scale(.988); }
+  to { opacity: 1; transform: none; }
+}
+
 #editor {
   flex: 1;
-  width: 100%;
+  min-width: 0;
   resize: none;
   border: none;
   outline: none;
@@ -239,9 +290,47 @@ body { display: flex; flex-direction: column; }
   font-size: 13.5px;
   line-height: 1.7;
   padding: 16px 18px;
+  white-space: pre;      /* 行号与行内容严格对齐 */
+  overflow-x: auto;
 }
 #editor::placeholder { color: #4b5b74; }
 #editor:focus-visible { outline: none; }  /* 光标已可见，避免整框描边 */
+
+/* 编辑器主体：行号 + 输入区 */
+.editor-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+.line-numbers {
+  flex: none;
+  min-width: 46px;
+  padding: 16px 10px 16px 12px;
+  text-align: right;
+  color: #3d4d68;
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 1.7;
+  white-space: pre;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* 编辑器底部状态：行数 / 字数 / 提示 */
+.editor-foot {
+  flex: none;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+  font-size: 11.5px;
+}
+.editor-foot .foot-hint { margin-left: auto; opacity: .75; }
 
 .preview-pane { flex: 1; background: var(--bg); }
 
@@ -256,6 +345,7 @@ body { display: flex; flex-direction: column; }
   background:
     radial-gradient(circle at 18% 12%, rgba(34, 197, 94, .05), transparent 42%),
     radial-gradient(circle at 82% 82%, rgba(59, 130, 246, .06), transparent 45%),
+    radial-gradient(rgba(148, 163, 184, .09) 1px, transparent 1.5px) 0 0 / 22px 22px,
     var(--bg);
 }
 #card { flex: none; }
@@ -307,6 +397,9 @@ body { display: flex; flex-direction: column; }
   z-index: 99;
 }
 .toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   color: var(--fg);
@@ -316,6 +409,9 @@ body { display: flex; flex-direction: column; }
   box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
   animation: toast-in .22s ease;
 }
+.toast-icon { display: inline-flex; flex: none; color: var(--fg-muted); }
+.toast.success .toast-icon { color: var(--accent); }
+.toast.error .toast-icon { color: var(--danger); }
 .toast.success { border-color: rgba(34, 197, 94, .55); }
 .toast.error { border-color: rgba(239, 68, 68, .6); }
 @keyframes toast-in {
@@ -367,6 +463,8 @@ body { display: flex; flex-direction: column; }
 
 @media (max-width: 480px) {
   .topbar, .toolbar, .statusbar { padding-left: 12px; padding-right: 12px; }
+  .line-numbers { display: none; }
+  .editor-foot .foot-hint { display: none; }
   .toolbar-group {
     flex-wrap: nowrap;
     overflow-x: auto;
