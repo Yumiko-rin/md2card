@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- md2card · CLI 渲染模板。
+     CLI 先用 add_init_script 注入 window.MD2CARD_CONFIG（JSON），
+     再 goto 本文件，等待 body[data-ready="1"] 后对 .mdc-card 截图。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>md2card</title>
+<link rel="stylesheet" href="../web/card.css">
+<script src="../web/lib/marked.min.js"></script>
+<script src="../web/lib/highlight.min.js"></script>
+<script src="../web/renderer.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; }
+  body { display: flow-root; }
+  #card { margin: 24px; }
+</style>
+</head>
+<body>
+
+<div class="mdc-card" id="card">
+  <div class="mdc-topbar"></div>
+  <div class="mdc-inner">
+    <header class="mdc-header" hidden>
+      <h1 class="mdc-title"></h1>
+      <div class="mdc-date"></div>
+    </header>
+    <div class="mdc-body"></div>
+    <footer class="mdc-footer" hidden>
+      <span class="mdc-watermark"></span>
+      <span class="mdc-brand">md2card</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var cfg = window.MD2CARD_CONFIG || {};
+    md2card.init({ libBase: "../web/lib/" });
+    md2card.render(document.getElementById("card"), cfg.markdown || "", cfg);
+
+    function ready() { document.body.dataset.ready = "1"; }
+
+    Promise.all([
+      document.fonts ? document.fonts.ready : Promise.resolve(),
+      Promise.all(
+        Array.prototype.map.call(document.images, function (img) {
+          return img.complete ? Promise.resolve()
+            : new Promise(function (res) { img.onload = img.onerror = res; });
+        })
+      )
+    ]).then(function () {
+      /* 等一帧让高亮与布局稳定后再截图 */
+      requestAnimationFrame(function () { setTimeout(ready, 60); });
+    }).catch(ready);
+
+    /* 兜底：3 秒后无论如何置为就绪 */
+    setTimeout(ready, 3000);
+  })();
+</script>
+</body>
+</html>

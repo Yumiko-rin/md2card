@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>md2card · Markdown 一键转分享卡片</title>
+<link rel="stylesheet" href="card.css">
+<link rel="stylesheet" href="app.css">
+<script src="lib/marked.min.js"></script>
+<script src="lib/highlight.min.js"></script>
+<script src="lib/html-to-image.min.js"></script>
+<script src="renderer.js"></script>
+</head>
+<body>
+
+<!-- ═══ 顶栏 ═══ -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-logo">✦</span>
+    <span class="brand-name">md2card</span>
+    <span class="brand-sub">Markdown 一键转分享卡片</span>
+  </div>
+  <a class="gh-link" href="https://github.com/Yumiko-rin/md2card" target="_blank" rel="noopener">GitHub ↗</a>
+</header>
+
+<!-- ═══ 工具栏 ═══ -->
+<nav class="toolbar">
+  <div class="toolbar-group" id="theme-chips" aria-label="主题选择"></div>
+
+  <div class="toolbar-sep"></div>
+
+  <label class="toolbar-item">
+    <span>宽度</span>
+    <select id="opt-width">
+      <option value="360">360px</option>
+      <option value="420" selected>420px</option>
+      <option value="480">480px</option>
+    </select>
+  </label>
+  <label class="toolbar-item">
+    <span>清晰度</span>
+    <select id="opt-scale">
+      <option value="2" selected>2x 高清</option>
+      <option value="3">3x 超清</option>
+    </select>
+  </label>
+
+  <div class="toolbar-sep"></div>
+
+  <label class="toolbar-item checkbox">
+    <input type="checkbox" id="opt-header" checked>
+    <span>标题栏</span>
+  </label>
+  <label class="toolbar-item checkbox">
+    <input type="checkbox" id="opt-footer" checked>
+    <span>水印</span>
+  </label>
+  <label class="toolbar-item">
+    <span>署名</span>
+    <input type="text" id="opt-watermark" value="@Yumiko-rin" maxlength="30" placeholder="你的署名">
+  </label>
+
+  <div class="toolbar-spacer"></div>
+
+  <button class="btn ghost" id="btn-demo" title="载入示例文档">示例</button>
+  <button class="btn ghost" id="btn-clear" title="清空编辑器">清空</button>
+  <button class="btn ghost" id="btn-copy" title="复制到剪贴板">复制图片</button>
+  <button class="btn primary" id="btn-download" title="导出 PNG">下载 PNG</button>
+</nav>
+
+<!-- ═══ 主区域：编辑器 + 预览 ═══ -->
+<main class="workspace">
+  <section class="editor-pane">
+    <div class="pane-label">Markdown 源文本</div>
+    <textarea id="editor" spellcheck="false" placeholder="在这里输入 Markdown…"></textarea>
+  </section>
+
+  <section class="preview-pane">
+    <div class="pane-label">卡片预览（实时）</div>
+    <div class="stage" id="stage">
+      <div class="mdc-card" id="card">
+        <div class="mdc-topbar"></div>
+        <div class="mdc-inner">
+          <header class="mdc-header" hidden>
+            <h1 class="mdc-title"></h1>
+            <div class="mdc-date"></div>
+          </header>
+          <div class="mdc-body"></div>
+          <footer class="mdc-footer" hidden>
+            <span class="mdc-watermark"></span>
+            <span class="mdc-brand">md2card</span>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast-container"></div>
+
+<footer class="statusbar">
+  <span id="status-info">就绪</span>
+  <span class="status-hint">数据仅保存在浏览器本地 · 支持 GFM / 代码高亮 / 任务列表 / 表格</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

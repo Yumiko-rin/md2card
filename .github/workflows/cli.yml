@@ -1,0 +1,36 @@
+name: CLI Smoke Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r cli/requirements.txt
+          playwright install chromium --with-deps
+
+      - name: List themes
+        run: python cli/md2card.py --list-themes
+
+      - name: Render demo card
+        run: |
+          python cli/md2card.py examples/demo.md --theme midnight --scale 2 -o out/demo-midnight.png
+          python cli/md2card.py examples/demo.md --theme serenity --scale 2 -o out/demo-serenity.png
+
+      - name: Upload rendered cards
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-cards
+          path: out/

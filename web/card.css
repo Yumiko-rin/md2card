@@ -1,0 +1,393 @@
+/* ============================================================
+ * md2card · 卡片样式与主题系统（Web 与 CLI 共用）
+ * 每套主题只声明一组 CSS 变量，排版规则统一写在下方。
+ * 新增主题：复制任意 theme 块，改 id 与变量即可。
+ * ============================================================ */
+
+:root {
+  --mdc-radius: 18px;
+  --mdc-font: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mdc-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+
+/* ---------------- 卡片骨架 ---------------- */
+
+.mdc-card {
+  box-sizing: border-box;
+  width: var(--mdc-width, 420px);
+  background: var(--mdc-bg);
+  color: var(--mdc-text);
+  font-family: var(--mdc-font);
+  font-size: 15px;
+  line-height: 1.75;
+  border-radius: var(--mdc-radius);
+  border: 1px solid var(--mdc-border);
+  box-shadow: var(--mdc-shadow);
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mdc-topbar {
+  height: 5px;
+  background: var(--mdc-topbar);
+  flex: none;
+}
+
+.mdc-inner {
+  padding: 30px 32px 20px;
+}
+
+/* 卡片头部：标题 + 日期 */
+.mdc-header {
+  margin-bottom: 18px;
+  text-align: center;
+}
+.mdc-header[hidden] { display: none; }
+.mdc-header .mdc-title {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--mdc-text);
+  letter-spacing: .02em;
+  margin: 0;
+}
+.mdc-header .mdc-title::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--mdc-accent);
+  margin: 12px auto 0;
+}
+.mdc-header .mdc-date {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--mdc-muted);
+  letter-spacing: .08em;
+}
+
+/* 卡片底部：水印 + 品牌 */
+.mdc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--mdc-border);
+  font-size: 12px;
+  color: var(--mdc-muted);
+}
+.mdc-footer[hidden] { display: none; }
+.mdc-footer .mdc-watermark { letter-spacing: .03em; }
+.mdc-footer .mdc-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: .04em;
+}
+.mdc-footer .mdc-brand::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mdc-accent);
+}
+
+/* ---------------- Markdown 排版 ---------------- */
+
+.mdc-body > :first-child { margin-top: 0; }
+.mdc-body > :last-child { margin-bottom: 0; }
+.mdc-body h1, .mdc-body h2, .mdc-body h3,
+.mdc-body h4, .mdc-body h5, .mdc-body h6 {
+  color: var(--mdc-text);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.5em 0 .6em;
+}
+.mdc-body h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-top: .4em;
+}
+.mdc-body h1::after {
+  content: "";
+  display: block;
+  width: 32px; height: 3px;
+  border-radius: 2px;
+  background: var(--mdc-accent);
+  margin: 10px auto 0;
+}
+.mdc-body h2 {
+  font-size: 17.5px;
+  padding-left: 12px;
+  position: relative;
+}
+.mdc-body h2::before {
+  content: "";
+  position: absolute;
+  left: 0; top: .18em;
+  width: 4px; height: 1em;
+  border-radius: 2px;
+  background: var(--mdc-accent);
+}
+.mdc-body h3 { font-size: 16px; color: var(--mdc-accent-strong, var(--mdc-accent)); }
+.mdc-body h4 { font-size: 15px; }
+.mdc-body h5, .mdc-body h6 { font-size: 14px; color: var(--mdc-muted); }
+
+.mdc-body p { margin: .85em 0; }
+
+.mdc-body strong { color: var(--mdc-strong, var(--mdc-text)); font-weight: 700; }
+.mdc-body em { font-style: italic; }
+.mdc-body del { color: var(--mdc-muted); }
+
+.mdc-body a {
+  color: var(--mdc-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--mdc-accent) 45%, transparent);
+  word-break: break-all;
+}
+
+/* 行内代码 */
+.mdc-body code {
+  font-family: var(--mdc-mono);
+  font-size: .86em;
+  background: var(--mdc-inline-code-bg);
+  color: var(--mdc-inline-code-text);
+  padding: 2px 6px;
+  border-radius: 6px;
+  word-break: break-word;
+}
+
+/* 代码块 */
+.mdc-body pre {
+  background: var(--mdc-pre-bg);
+  border: 1px solid var(--mdc-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 1em 0;
+  overflow: hidden;
+}
+.mdc-body pre code {
+  display: block;
+  background: transparent;
+  color: var(--mdc-pre-text);
+  padding: 0;
+  font-size: 12.5px;
+  line-height: 1.65;
+  white-space: pre;
+}
+
+/* 引用 */
+.mdc-body blockquote {
+  margin: 1em 0;
+  padding: 10px 16px;
+  border-left: 4px solid var(--mdc-accent);
+  background: var(--mdc-quote-bg);
+  border-radius: 0 10px 10px 0;
+  color: var(--mdc-muted);
+}
+.mdc-body blockquote p { margin: .3em 0; }
+
+/* 列表 */
+.mdc-body ul, .mdc-body ol {
+  margin: .8em 0;
+  padding-left: 1.4em;
+}
+.mdc-body li { margin: .35em 0; }
+.mdc-body li::marker { color: var(--mdc-accent); }
+
+/* 任务列表 */
+.mdc-body li.task-list-item,
+.mdc-body li:has(> input[type="checkbox"]) {
+  list-style: none;
+  margin-left: -1.3em;
+}
+.mdc-body input[type="checkbox"] {
+  appearance: none;
+  width: 15px; height: 15px;
+  border: 1.5px solid var(--mdc-accent);
+  border-radius: 4px;
+  vertical-align: -2px;
+  margin-right: 7px;
+  position: relative;
+}
+.mdc-body input[type="checkbox"]:checked {
+  background: var(--mdc-accent);
+}
+.mdc-body input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 4px; height: 8px;
+  border: solid var(--mdc-checkmark, #fff);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 表格 */
+.mdc-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 13.5px;
+  border: 1px solid var(--mdc-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.mdc-body th {
+  background: var(--mdc-table-header-bg);
+  color: var(--mdc-text);
+  font-weight: 700;
+}
+.mdc-body th, .mdc-body td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--mdc-border);
+  text-align: left;
+}
+.mdc-body tr:last-child td { border-bottom: none; }
+
+/* 图片 / 分割线 */
+.mdc-body img {
+  max-width: 100%;
+  border-radius: 10px;
+  display: block;
+  margin: .8em auto;
+}
+.mdc-body hr {
+  border: none;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--mdc-divider);
+  margin: 1.6em 0;
+}
+
+/* ============================================================
+ * 主题定义
+ * ============================================================ */
+
+/* ① 静谧 Serenity —— 明亮极简，蓝色点缀（默认） */
+.mdc-theme-serenity {
+  --mdc-bg: linear-gradient(180deg, #ffffff 0%, #f6f9fe 100%);
+  --mdc-text: #1f2937;
+  --mdc-muted: #6b7280;
+  --mdc-strong: #111827;
+  --mdc-accent: #4f6ef2;
+  --mdc-border: #e5eaf3;
+  --mdc-inline-code-bg: #eef2fb;
+  --mdc-inline-code-text: #4353c9;
+  --mdc-pre-bg: #f8fafd;
+  --mdc-pre-text: #334155;
+  --mdc-quote-bg: #f4f7fe;
+  --mdc-table-header-bg: #f1f5fd;
+  --mdc-divider: linear-gradient(90deg, transparent, #c9d4f2, transparent);
+  --mdc-topbar: linear-gradient(90deg, #4f6ef2, #38bdf8);
+  --mdc-shadow: 0 18px 50px rgba(59, 91, 219, .14);
+  --mdc-checkmark: #fff;
+}
+
+/* ② 深空夜航 Midnight —— 暗色科技感，青色点缀 */
+.mdc-theme-midnight {
+  --mdc-bg: linear-gradient(165deg, #0b1020 0%, #0f1a32 60%, #12203e 100%);
+  --mdc-text: #dbe4f3;
+  --mdc-muted: #8291ad;
+  --mdc-strong: #ffffff;
+  --mdc-accent: #39d2c0;
+  --mdc-border: rgba(148, 178, 255, .14);
+  --mdc-inline-code-bg: rgba(57, 210, 192, .12);
+  --mdc-inline-code-text: #5fe6d6;
+  --mdc-pre-bg: #0a101f;
+  --mdc-pre-text: #c9d6f2;
+  --mdc-quote-bg: rgba(57, 210, 192, .07);
+  --mdc-table-header-bg: rgba(57, 210, 192, .10);
+  --mdc-divider: linear-gradient(90deg, transparent, rgba(57,210,192,.5), transparent);
+  --mdc-topbar: linear-gradient(90deg, #39d2c0, #4f8ef7 60%, #a78bfa);
+  --mdc-shadow: 0 22px 60px rgba(0, 0, 0, .55);
+  --mdc-checkmark: #06231f;
+}
+
+/* ③ 落日 Sunset —— 暖色渐变，橘红点缀 */
+.mdc-theme-sunset {
+  --mdc-bg: linear-gradient(180deg, #fffaf4 0%, #fdf3ea 100%);
+  --mdc-text: #443128;
+  --mdc-muted: #a3867a;
+  --mdc-strong: #322019;
+  --mdc-accent: #f2622e;
+  --mdc-border: #f3e2d4;
+  --mdc-inline-code-bg: #fdeee2;
+  --mdc-inline-code-text: #c2410c;
+  --mdc-pre-bg: #fdf6ef;
+  --mdc-pre-text: #5b4636;
+  --mdc-quote-bg: #fdf0e4;
+  --mdc-table-header-bg: #fbeadb;
+  --mdc-divider: linear-gradient(90deg, transparent, #f0cfae, transparent);
+  --mdc-topbar: linear-gradient(90deg, #fb923c, #f43f5e);
+  --mdc-shadow: 0 18px 50px rgba(214, 116, 61, .18);
+  --mdc-checkmark: #fff;
+}
+
+/* ④ 樱粉 Sakura —— 柔粉浪漫 */
+.mdc-theme-sakura {
+  --mdc-bg: linear-gradient(180deg, #fffafb 0%, #fdf2f6 100%);
+  --mdc-text: #47333c;
+  --mdc-muted: #ab8a96;
+  --mdc-strong: #331f28;
+  --mdc-accent: #ec5f9d;
+  --mdc-border: #f6e0e8;
+  --mdc-inline-code-bg: #fdeaf2;
+  --mdc-inline-code-text: #be3d78;
+  --mdc-pre-bg: #fdf5f8;
+  --mdc-pre-text: #5c4350;
+  --mdc-quote-bg: #fdeef4;
+  --mdc-table-header-bg: #fbe3ed;
+  --mdc-divider: linear-gradient(90deg, transparent, #f2c9d9, transparent);
+  --mdc-topbar: linear-gradient(90deg, #f472b6, #c084fc);
+  --mdc-shadow: 0 18px 50px rgba(214, 106, 158, .18);
+  --mdc-checkmark: #fff;
+}
+
+/* ⑤ 抹茶 Matcha —— 清新草木绿 */
+.mdc-theme-matcha {
+  --mdc-bg: linear-gradient(180deg, #fbfdf9 0%, #f2f8ef 100%);
+  --mdc-text: #31402f;
+  --mdc-muted: #7f917a;
+  --mdc-strong: #1f2b1d;
+  --mdc-accent: #4f9d5d;
+  --mdc-border: #e0ecda;
+  --mdc-inline-code-bg: #e9f5e6;
+  --mdc-inline-code-text: #37744a;
+  --mdc-pre-bg: #f6fbf3;
+  --mdc-pre-text: #46583f;
+  --mdc-quote-bg: #edf7e9;
+  --mdc-table-header-bg: #e6f2e0;
+  --mdc-divider: linear-gradient(90deg, transparent, #c4ddb6, transparent);
+  --mdc-topbar: linear-gradient(90deg, #86c99b, #4f9d5d);
+  --mdc-shadow: 0 18px 50px rgba(96, 156, 100, .16);
+  --mdc-checkmark: #fff;
+}
+
+/* ⑥ 纸墨 InkPaper —— 黑白衬线，印刷质感 */
+.mdc-theme-inkpaper {
+  --mdc-bg: #faf9f5;
+  --mdc-text: #211f1a;
+  --mdc-muted: #7c786d;
+  --mdc-strong: #000000;
+  --mdc-accent: #211f1a;
+  --mdc-border: #e3e0d6;
+  --mdc-inline-code-bg: #efede4;
+  --mdc-inline-code-text: #211f1a;
+  --mdc-pre-bg: #f2f0e9;
+  --mdc-pre-text: #2c2a24;
+  --mdc-quote-bg: #f2f0e9;
+  --mdc-table-header-bg: #eceadf;
+  --mdc-divider: linear-gradient(90deg, transparent, #b9b5a5, transparent);
+  --mdc-topbar: linear-gradient(90deg, #211f1a 0 50%, #b9b5a5 50% 100%);
+  --mdc-shadow: 0 14px 40px rgba(60, 56, 44, .16);
+  --mdc-checkmark: #faf9f5;
+  font-family: Georgia, "Nimbus Roman", "Songti SC", "Noto Serif CJK SC", "SimSun", serif;
+}
+.mdc-theme-inkpaper .mdc-body code,
+.mdc-theme-inkpaper .mdc-body pre code {
+  font-family: var(--mdc-mono);
+}
