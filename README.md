@@ -6,6 +6,8 @@
 
 粘贴 Markdown → 挑主题 → 导出高清 PNG。发朋友圈、发群、发社交媒体，从此不再截图。
 
+**🔗 在线使用：[https://yumiko-rin.github.io/md2card/](https://yumiko-rin.github.io/md2card/)**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-4F46E5?style=flat-square)](LICENSE)
 [![Web: Pure Frontend](https://img.shields.io/badge/Web-%E7%BA%AF%E5%89%8D%E7%AB%AF%E6%97%A0%E4%BE%9D%E8%B5%96-39D2C0?style=flat-square)](web/)
 [![CLI: Playwright](https://img.shields.io/badge/CLI-Playwright%20%E9%AB%98%E6%B8%85%E5%AF%BC%E5%87%BA-2EAD33?style=flat-square&logo=python&logoColor=white)](cli/)
