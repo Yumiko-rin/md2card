@@ -332,6 +332,21 @@
     });
   }
 
+  /* ---------- 深浅主题切换 ---------- */
+
+  function currentTheme() {
+    return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+  }
+
+  function bindThemeToggle() {
+    $("#btn-theme").addEventListener("click", function () {
+      var next = currentTheme() === "dark" ? "light" : "dark";
+      if (next === "light") delete document.documentElement.dataset.theme;
+      else document.documentElement.dataset.theme = "dark";
+      try { localStorage.setItem("md2card:theme", next); } catch (e) { /* 忽略 */ }
+    });
+  }
+
   /* ---------- 事件绑定 ---------- */
 
   function bindEvents() {
@@ -400,6 +415,7 @@
   editor.value = state.markdown;
   buildThemeChips();
   bindEvents();
+  bindThemeToggle();
   render();
   updateLineNumbers();
   updateCounts();
